@@ -1,4 +1,4 @@
-import ReportsList from "./components/List";
+import ReportsList from "./components/ReportList";
 
 function App() {
   return <ReportsList />;
