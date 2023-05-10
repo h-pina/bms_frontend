@@ -6,12 +6,15 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import Modal from "../Modal";
+import EditingModal from "../EditingModal";
 
 import { useEffect, useState } from "react";
+import { Box } from "@mui/material";
 
 export default function ReportsList() {
   const [reportsList, setReportsList] = useState([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openViewModal, setOpenViewModal] = useState(false);
+  const [openEditingModal, setOpenEditingModal] = useState(false);
   const [selectedReport, setSelectedReport] = useState();
 
   useEffect(() => {
@@ -25,16 +28,30 @@ export default function ReportsList() {
     fetchReportsData();
   }, []);
 
-  const openModalForReport = (reportId) => {
+  const openModalForReportView = (reportId) => {
     setSelectedReport(reportId);
-    toggleModal();
+    toggleViewModal();
   };
 
-  const toggleModal = () => setOpenModal(!openModal);
+  const openModalForReportEditing = (reportId) => {
+    setSelectedReport(reportId);
+    toggleEditingModal();
+  };
+
+  const toggleViewModal = () => setOpenViewModal(!openViewModal);
+  const toggleEditingModal = () => setOpenEditingModal(!openEditingModal);
 
   return (
     reportsList && (
-      <>
+      <Box
+        sx={{
+          margin: 0,
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <List sx={{ backgroundColor: "grey", width: "30vw" }}>
           {reportsList.map((report) => (
             <ListItemContainer
@@ -43,7 +60,7 @@ export default function ReportsList() {
                   sx={{ marginRight: "5px" }}
                   edge="end"
                   aria-label="comments"
-                  onClick={() => console.log("cliquei para editar")}
+                  onClick={() => openModalForReportEditing(report.id)}
                 >
                   <EditIcon />
                 </IconButton>
@@ -55,7 +72,7 @@ export default function ReportsList() {
                   border: "solid 1px black",
                   margin: "10px",
                 }}
-                onClick={() => openModalForReport(report.id)}
+                onClick={() => openModalForReportView(report.id)}
               >
                 <ListItemText primary={report.month} secondary={report.id} />
               </ListItemButton>
@@ -64,10 +81,16 @@ export default function ReportsList() {
         </List>
         <Modal
           reportId={selectedReport}
-          open={openModal}
-          handleClose={toggleModal}
+          open={openViewModal}
+          handleClose={toggleViewModal}
         />
-      </>
+
+        <EditingModal
+          reportId={selectedReport}
+          open={openEditingModal}
+          handleClose={toggleEditingModal}
+        />
+      </Box>
     )
   );
 }

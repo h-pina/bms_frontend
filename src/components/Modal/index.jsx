@@ -45,7 +45,6 @@ export default function BasicModal({ reportId, open, handleClose }) {
           <Typography>
             {fullModalInfo.month + "/" + fullModalInfo.year}
           </Typography>
-          {console.log(fullModalInfo.transactionList)}
           <TransactionsTable transactionList={fullModalInfo.transactionList} />
         </Box>
       </Modal>
